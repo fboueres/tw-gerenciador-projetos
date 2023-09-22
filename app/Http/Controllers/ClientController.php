@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ClientRequest;
 use App\Models\Client;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ClientController extends Controller
@@ -51,10 +51,10 @@ class ClientController extends Controller
     /**
      * Cria um cliente no banco de dados
      *
-     * @param Request $request
+     * @param ClientRequest $request
      * @return RedirectResponse
      */
-    public function store(Request $request): RedirectResponse
+    public function store(ClientRequest $request): RedirectResponse
     {
         $dados = $request->except('_token');
 
@@ -83,10 +83,10 @@ class ClientController extends Controller
      * Atualiza o cliente no banco de dados
      *
      * @param integer $id
-     * @param Request $request
+     * @param ClientRequest $request
      * @return RedirectResponse
      */
-    public function update(int $id, Request $request): RedirectResponse
+    public function update(int $id, ClientRequest $request): RedirectResponse
     {
         $client = Client::findOrFail($id);
 
