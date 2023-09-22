@@ -60,7 +60,8 @@ class ClientController extends Controller
 
         Client::create($dados);
 
-        return redirect('/clients');
+        return redirect()->route('clients.index')
+            ->with('mensagem', "Cadastrado com sucesso!");
     }
 
     /**
@@ -95,7 +96,8 @@ class ClientController extends Controller
             'observacao' => $request->observacao
         ]);
 
-        return redirect('/clients');
+        return redirect()->route('clients.index')
+            ->with('mensagem', "Atualizado com sucesso!");
     }
 
     /**
@@ -110,6 +112,6 @@ class ClientController extends Controller
 
         $client->delete();
 
-        return redirect('/clients');
+        return redirect()->route('cliente.index');
     }
 }
