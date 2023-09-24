@@ -83,8 +83,15 @@ class EmployeeController extends Controller
      */
     public function update(Request $request, Employee $employee)
     {
-        $employee->update($request->except('_token'));
+        DB::transaction(function () use($request, $employee) {
 
+            $employee->update($request->only(['nome', 'cpf', 'data_contratacao']));
+            
+            $employee->address->update(
+                $request->only(['logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'cep', 'estado'])
+            );
+        });
+        
         return redirect()->route('employees.index')
             ->with('mensagem', 'Funcionário atualizado com sucesso');
     }
@@ -97,7 +104,11 @@ class EmployeeController extends Controller
      */
     public function destroy(Employee $employee)
     {
-        $employee->delete();
+        DB::transaction(function() use ($employee) {
+            $employee->address->delete();
+            
+            $employee->delete();
+        });
 
         return redirect()->route('employees.index')
             ->with('mensagem', 'Funcionário excluído com sucesso.');
