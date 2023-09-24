@@ -23,6 +23,7 @@
                     <td>{{ is_null($employee->data_demissao) ? 'Ativo' : 'Demitido' }}</td>
                     <td>
                         <a class="btn btn-primary" href="{{ route('employees.edit', $employee) }}">Atualizar</a>
+                        <a class="btn btn-info" href="{{ route('employees.show', $employee) }}">Detalhes</a>
                         <form action="{{ route('employees.destroy', $employee) }}" method="POST" style="display: inline;">
                             @method('DELETE')
                             @csrf
