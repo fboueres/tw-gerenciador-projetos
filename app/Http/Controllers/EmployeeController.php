@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Employee;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EmployeeController extends Controller
 {
@@ -37,7 +38,15 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
-        Employee::create($request->except('_token'));
+        DB::transaction(function () use($request) {
+            $employee = Employee::create(
+                $request->only(['nome', 'cpf', 'data_contratacao'])
+            );
+    
+            $employee->address()->create(
+                $request->only(['logradouro', 'numero', 'complemento', 'bairro', 'cidade', 'cep', 'estado'])
+            );            
+        });
 
         return redirect()->route('employees.index')
             ->with('mensagem', 'Funcionário criado com sucesso');
