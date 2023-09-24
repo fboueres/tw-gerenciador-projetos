@@ -43,5 +43,5 @@
 
     {{ $employees->links() }}
 
-    <a class="btn btn-success" href="{{ route('employees.create') }}">Novo Cliente</a>
+    <a class="btn btn-success" href="{{ route('employees.create') }}">Novo Funcionário</a>
 @endsection    
