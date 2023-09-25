@@ -1,30 +1,29 @@
 @extends('app')
 
-@section('titulo', 'Lista de Funcionários')
+@section('titulo', 'Lista de projetos')
 
 @section('conteudo')
-    <h1>Lista de Funcionários</h1>
+    <h1>Lista de projetos</h1>
     <table class="table">
         <thead>
             <tr>
                 <th scope="col">ID</th>
                 <th scope="col">Nome</th>
-                <th scope="col">Data de Contração</th>
-                <th scope="col">Situação</th>
+                <th scope="col">Cliente</th>
                 <th scope="col">Ações</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($employees as $employee)
+            @forelse ($projects as $project)
                 <tr>
-                    <th scope="row">{{ $employee->id }}</th>
-                    <td><a href="{{ route('employees.show', $employee) }}">{{ $employee->nome }}</a></td>
-                    <td>{{ date_to_br($employee->data_contratacao) }}</td>
-                    <td>{{ situacao_funcionario($employee->data_demissao) }}</td>
+                    <th scope="row">{{ $project->id }}</th>
+                    <td><a href="{{ route('projects.show', $project) }}">{{ $project->nome }}</a></td>
+                    <td>{{ $project->client->nome }}</td>
                     <td>
-                        <a class="btn btn-primary" href="{{ route('employees.edit', $employee) }}">Atualizar</a>
-                        <a class="btn btn-info" href="{{ route('employees.show', $employee) }}">Detalhes</a>
-                        <form action="{{ route('employees.destroy', $employee) }}" method="POST" style="display: inline;">
+                        <a class="btn btn-primary" href="{{ route('projects.edit', $project) }}">
+                            Atualizar
+                        </a>
+                        <form action="{{ route('projects.destroy', $project) }}" method="POST" style="display: inline;">
                             @method('DELETE')
                             @csrf
                             <button class="btn btn-danger" type="submit" onclick="return confirm('Tem certeza que deseja apagar?')">Apagar</button>
@@ -33,8 +32,8 @@
                 </tr>
             @empty
                 <tr>
-                    <th></th>
-                    <td>Nenhum funcionário cadastrado</td>
+                    <td></td>
+                    <td>Nenhum Projeto Cadastrado</td>
                     <td></td>
                     <td></td>
                 </tr>
@@ -42,7 +41,7 @@
         </tbody>
     </table>
 
-    {{ $employees->links() }}
+    {{ $projects->links() }}
 
-    <a class="btn btn-success" href="{{ route('employees.create') }}">Novo Funcionário</a>
+    <a class="btn btn-success" href="{{ route('projects.create') }}">Novo Projeto</a>
 @endsection    
