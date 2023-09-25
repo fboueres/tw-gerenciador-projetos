@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests;
 
-use App\Rules\ValorMonetario;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Validator;
 
@@ -27,7 +26,7 @@ class ProjectRequest extends FormRequest
     {
         return [
             'nome' => ['required', 'string', 'min:2', 'max:100'],
-            'orcamento' => ['required', 'min:0', new ValorMonetario],
+            'orcamento' => ['required', 'numeric', 'min:0'],
             'data_inicio' => ['required', 'date_format:d/m/Y'],
             'data_final' => ['required', 'date_format:d/m/Y'],
             'client_id' => ['required', 'int'],
@@ -36,10 +35,23 @@ class ProjectRequest extends FormRequest
     }
 
     /**
-     * Após a validação limpa os dados
+     * Trata os dados antes de ser usado
      *
      * @return void
      */
+    public function validationData()
+    {
+        $dados = $this->all();
+
+        //$dados['data_inicio'] = date_to_iso($dados['data_inicio']);
+        //$dados['data_final'] = date_to_iso($dados['data_final']);
+        $dados['orcamento'] = str_replace(['.', ','], ['', '.'], $dados['orcamento']);
+
+        $this->replace($dados);
+
+        return $dados;
+    }
+
     protected function getValidatorInstance()
     {
         $request = $this;
@@ -50,7 +62,6 @@ class ProjectRequest extends FormRequest
 
                 $dados['data_inicio'] = date_to_iso($dados['data_inicio']);
                 $dados['data_final'] = date_to_iso($dados['data_final']);
-                $dados['orcamento'] = str_replace(['.', ','], ['', '.'], $dados['orcamento']);
 
                 $request->replace($dados);
             }
